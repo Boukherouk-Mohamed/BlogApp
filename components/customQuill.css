@@ -1,0 +1,22 @@
+.ql-toolbar .ql-formats .ql-picker-label {
+    color: #FFFFFF; /* Toolbar dropdown labels color */
+}
+
+.ql-toolbar .ql-formats .ql-picker-item {
+    color: #FFFFFF; /* Toolbar dropdown items color */
+}
+
+.ql-toolbar .ql-formats button {
+    color: #FFFFFF; /* Toolbar buttons color */
+}
+
+.ql-toolbar .ql-formats button.ql-active,
+.ql-toolbar .ql-formats button:hover {
+    color: #a3386d; /* Toolbar buttons hover and active state color */
+}
+
+/* Adjust the background color if needed */
+.ql-toolbar {
+    border-radius: 5px 5px 0 0;
+    background-color: #bfdbfe; /* Toolbar background color */
+}
