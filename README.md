@@ -2,7 +2,7 @@
 
 This is a full-stack blog CRUD (Create, Read, Update, Delete) application built with Next.js, MongoDB, and NextAuth for authentication. The app allows users to register, log in, and manage blog posts. Each blog post includes a title, content, creation date, and information about the author. The app uses Tailwind CSS and DaisyUI for styling and is fully dockerized for easy deployment.
 
-## Features
+### Features
 
 - User authentication (register and login) with NextAuth
 - CRUD operations for blog posts
@@ -12,15 +12,15 @@ This is a full-stack blog CRUD (Create, Read, Update, Delete) application built 
   - View details of a specific blog post, including the author and creation date
 - Responsive UI built with Tailwind CSS and DaisyUI
 
-## Prerequisites
+### Prerequisites
 
 - Node.js
 - Docker (optional, for containerized deployment)
 - MongoDB instance (local or cloud)
 
-## Getting Started
+### Getting Started
 
-### 1. Clone the Repository
+## 1. Clone the Repository
 
 ```bash
 git clone https://github.com/Boukherouk-Mohamed/BlogApp.git
@@ -28,14 +28,14 @@ cd BlogApp
 ```
 
 
-### 2. Install Dependencies
+## 2. Install Dependencies
 
 ```bash
 npm install
 
 ```
 
-### 3. Environment Variables
+## 3. Environment Variables
 
 Create a .env file in the root of your project and add the following environment variables:
 ```bash
@@ -43,15 +43,15 @@ NEXTAUTH_SECRET=your_nextauth_secret
 MONGODB_URI=your_mongodb_uri
 ```
 
-### 4. Running the App
-## 4-1. Without Docker
+## 4. Running the App
+### 4-1. Without Docker
 
 To run the app locally without Docker:
 ```bash
 npm run dev
 ```
 The app will be available at http://localhost:3000.
-## 4-1. With Docker
+### 4-1. With Docker
 
 To run the app using Docker:
 
@@ -61,11 +61,11 @@ docker-compose up --build
 ```
 The app will be available at http://localhost:3000.
 
-### Usage
-  ## Authentication
+## Usage
+  ### Authentication
   - Register a new user or log in with an existing account.
   - After logging in, users can create, edit, and delete their own blog posts.
-  ## Blog Management
+  ### Blog Management
   - Create a Blog Post: Navigate to the "Create Blog" page, fill in the title and content, and submit.
   - Edit a Blog Post: Navigate to the blog post details page and click "Edit". Update the content and save changes.
   - Delete a Blog Post: Navigate to the blog post details page and click "Delete".
