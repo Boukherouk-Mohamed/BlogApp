@@ -7,9 +7,10 @@ import 'react-quill/dist/quill.snow.css';
 import './customQuill.css'; 
 import Navbar from "./Navbar";
 
-// Dynamically import ReactQuill to avoid SSR issues (only if using Next.js)
+//This component is used to edit a blog
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
+// list of modules thet the ReactQuill will contain when editing the blog content
 const modules = {
     toolbar: [
         [{ 'header': '1'}, {'header': '2'}],
@@ -44,7 +45,6 @@ export default function EditBlogForm(props) {
             // Show success toast
             toast.success("Blog updated successfully!");
 
-            // Redirect or update state as needed
         } catch (error) {
             console.log(error);
         }

@@ -1,4 +1,4 @@
-// components/RemoveBtn.jsx
+// this component is the delete button showen in every blog 
 "use client";
 
 import { DeleteOutlined } from "@ant-design/icons";

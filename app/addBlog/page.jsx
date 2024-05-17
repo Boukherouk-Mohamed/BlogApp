@@ -1,9 +1,8 @@
-// app/addBlog/page.jsx
 "use client"
 import { useState, useEffect } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import dynamic from 'next/dynamic'; // Import dynamic for dynamically importing ReactQuill
+import dynamic from 'next/dynamic'; 
 import Navbar from "@/components/Navbar";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";

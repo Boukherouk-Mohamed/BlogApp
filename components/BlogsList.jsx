@@ -1,4 +1,5 @@
 "use client";
+//this component is used to import the Blogs list from the database
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import RemoveBtn from "./RemoveBtn";

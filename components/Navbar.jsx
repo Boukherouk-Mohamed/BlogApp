@@ -1,7 +1,6 @@
 "use client"
 import React from 'react';
 import { signOut, useSession } from 'next-auth/react'
-import Link from 'next/link'
 
 
 function Navbar({ onSearch }) {
@@ -13,7 +12,7 @@ function Navbar({ onSearch }) {
                 <a href='/' className="btn btn-ghost text-xl">BlogRepo</a>
             </div>
             {!session ? (
-                
+                    //if the user is not logged in
                 <>
                     <div className="flex-none gap-2">
                         <div className="form-control">
@@ -28,7 +27,7 @@ function Navbar({ onSearch }) {
                 
                 </>
                 ) : (
-
+                    //if the user is successfully logged in
                     <>
                         <div className="flex-none gap-2">
                             <div className="form-control">

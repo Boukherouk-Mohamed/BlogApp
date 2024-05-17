@@ -1,4 +1,4 @@
-/* eslint-disable react/no-unescaped-entities */
+//login page
 'use client'
 import Link from "next/link"
 import { useRouter } from "next/navigation"

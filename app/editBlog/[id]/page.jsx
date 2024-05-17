@@ -1,6 +1,4 @@
 
-//app\editProduct\[id]\page.js
-
 import EditBlogForm from "@/components/EditBlogForm";
 
  
