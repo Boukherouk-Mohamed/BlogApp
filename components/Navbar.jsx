@@ -1,27 +1,63 @@
-import { Button } from "antd";
+"use client"
+import React from 'react';
+import { signOut, useSession } from 'next-auth/react'
+import Link from 'next/link'
 
-export default function Navbar() {
+
+function Navbar({ onSearch }) {
+    const {data: session} = useSession()
+
     return (
-        <>
-            <nav className="bg-white border-gray-200 dark:bg-gray-900">
-                <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-                    <a  href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-                        <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">BlogRepo</span>
-                    </a>
-                    
-                    <div className="flex items-center space-x-4 rtl:space-x-reverse">
-                        <div className="relative">
-                            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                                </svg>
-                            </div>
-                            <input type="text" id="search-navbar" className="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search by Title or Content"/>
+        <div className="navbar bg-base-100">
+            <div className="flex-1">
+                <a href='/' className="btn btn-ghost text-xl">BlogRepo</a>
+            </div>
+            {!session ? (
+                
+                <>
+                    <div className="flex-none gap-2">
+                        <div className="form-control">
+                            <a href="/login" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" aria-current="page"> Login</a>
                         </div>
-                        <a href="/addBlog" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" aria-current="page"> Add blog</a>
+                        <div className="form-control">
+                            <a href="/register" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" aria-current="page"> Register</a>
+                        </div>
                     </div>
-                </div>
-            </nav>
-        </>
+                
+                    
+                
+                </>
+                ) : (
+
+                    <>
+                        <div className="flex-none gap-2">
+                            <div className="form-control">
+                                <input
+                                    type="text"
+                                    placeholder="Search"
+                                    className="input input-bordered w-24 md:w-auto"
+                                    onChange={(e) => onSearch(e.target.value)}
+                                />
+                            </div>
+                            <div className="form-control">
+                                <a href="/addBlog" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" aria-current="page"> Add blog</a>
+                            </div>
+                            <div className="dropdown dropdown-end">
+                                <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+                                    <div className="w-10 rounded-full">
+                                        <img alt="Tailwind CSS Navbar component" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                                    </div>
+                                </div>
+                                <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-cyan-700 rounded-box w-52">
+                                    <li><a onClick={() => {signOut();}} >Logout</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </>
+                )}
+            
+        </div>
     );
 }
+
+export default Navbar;

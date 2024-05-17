@@ -5,6 +5,7 @@ const BlogSchema = new Schema(
     {
         title: { type: String, required: true },
         content: { type: String, required: true },
+        userEmail: { type: String, required: true },
         }, { timestamps: true });
         
  

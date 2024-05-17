@@ -1,66 +1,105 @@
-"use client"
+/* eslint-disable react/no-unescaped-entities */
+'use client'
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useEffect } from "react"
+import { signIn, useSession } from "next-auth/react"
+import { toast } from "react-toastify"
+import React from 'react'
+import Navbar from "@/components/Navbar"
 
-import React, { useState } from 'react'
-import Container from "@/components/Container";
-import Navbar from "@/components/Navbar2";
-import Link from 'next/link'
-import { signIn } from 'next-auth/react'
-import { useRouter, redirect } from 'next/navigation'
-import { useSession } from 'next-auth/react';
+const Login = () => {
+    const router = useRouter()
+    const { data: session, status: sessionStatus } = useSession();
+    useEffect(() => {
+        if (sessionStatus === 'authenticated') {
+          router.push('/')
+      }
+    }, [sessionStatus, router])
 
-function LoginPage() {
+    const handleSubmit = async(e) => {
+        e.preventDefault()
+        const email = e.target.email.value
+        const password = e.target.password.value
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
-
-    const router = useRouter();
-
-    const { data: session } = useSession();
-    if (session) router.replace('welcome');
-
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        try {
-
-            const res = await signIn("credentials", {
-                email, password, redirect: false
-            })
-
-            if (res.error) {
-                setError("Invalid credentials");
-                return;
-            }
-
-            router.replace("welcome");
-
-        } catch(error) {
-            console.log(error);
+        if (!email || !password) {
+			toast.error("Please fill all the input files")
+			return;
+        }
+        const res = await signIn('credentials', {
+            redirect: false,
+            email,password
+        })
+        if (res?.error) {
+            toast.error("Invalid Crediential")
+        } else {
+			router.replace('/')
+            toast.success("Successfully logged in")
         }
     }
-
+    
   return (
-    <Container>
-        <Navbar />
-            <div className='flex-grow'>
-                <div className="flex justify-center items-center">
-                    <div className='w-[400px] shadow-xl p-10 mt-5 rounded-xl'>
-                        <h3 className='text-3xl'>Login Page</h3>
-                        <hr className='my-3' />
-                        <form onSubmit={handleSubmit}>
-                            <input type="text" onChange={(e) => setEmail(e.target.value)} className='w-full bg-gray-200 border py-2 px-3 rounded text-lg my-2' placeholder='Enter your email' />
-                            <input type="password" onChange={(e) => setPassword(e.target.value)} className='w-full bg-gray-200 border py-2 px-3 rounded text-lg my-2' placeholder='Enter your password' />
-                            <button type='submit' className='bg-green-500 text-white border py-2 px-3 rounded text-lg my-2'>Sign In</button>
-                        </form>
-                        <hr className='my-3' />
-                        <p>Go to <Link href="/register" className='text-blue-500 hover:underline'>Register</Link> Page</p>
-                    </div>
-                </div>
-            </div>
-    </Container>
-  )
+		sessionStatus !== "authenticated" && (
+			<>
+			
+			<Navbar></Navbar>
+			<div className=" mt-24 flex items-center justify-center">
+				<div className="b-white bg-blue-900/10 p-6 rounded shadow-md w-96">
+					<h2 className="text-2xl font-semibold">Login</h2>
+					<form onSubmit={handleSubmit}>
+						<div className="mb-4">
+							<label
+								htmlFor="email"
+								className="black text-gray-700 text-sm font-bold mb-2"
+							>
+								Email
+							</label>
+							<input
+								type="email"
+								id="email"
+								name="email"
+								className="w-full p-2 border border-gray-300 rounded"
+							/>
+						</div>
+
+						<div className="mb-4">
+							<label
+								htmlFor="password"
+								className="black text-gray-700 text-sm font-bold mb-2"
+							>
+								Password
+							</label>
+							<input
+								type="password"
+								id="password"
+								name="password"
+								className="w-full p-2 border border-gray-300 rounded"
+							/>
+						</div>
+						<div>
+							<button
+								type="submit"
+								className="mb-5 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+							>
+								LogIn
+							</button>
+						</div>
+						<span>
+							Don't have an account?
+							<Link
+								className="text-center text-blue-500 hover:underline mt-2"
+								href={"/register"}
+							>
+								Register
+							</Link>
+						</span>
+					</form>
+				</div>
+			</div>
+			
+			</>
+		)
+	);
 }
 
-export default LoginPage
+export default Login

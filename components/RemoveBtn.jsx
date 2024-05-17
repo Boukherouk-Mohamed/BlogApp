@@ -11,9 +11,7 @@ export default function RemoveBtn({ id, onRemove }) {
 
     const removeBlog = async () => {
         setLoading(true);
-        const confirmed = confirm("Are you sure?");
-
-        if (confirmed) {
+        
             try {
                 const res = await fetch(`http://localhost:3000/api/blogs?id=${id}`, {
                     method: "DELETE",
@@ -27,9 +25,7 @@ export default function RemoveBtn({ id, onRemove }) {
             } finally {
                 setLoading(false);
             }
-        } else {
-            setLoading(false);
-        }
+        
     };
 
     return (

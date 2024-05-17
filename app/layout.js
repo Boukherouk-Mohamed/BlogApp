@@ -1,23 +1,28 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
+import ReactToast from '@/components/react-toast'
+import { getServerSession } from "next-auth";
+import SessionProvider from "@/util/SessionProvider";
 import Navbar from "@/components/Navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "BlogRepo",
-  description: "BlogApp for tech-challenge",
+	title: "BlogRepo",
+	description: "BlogApp for tech-challenge",
 };
 
-export default function RootLayout({ children }) {
-  return (
-    <html lang="en">
-      <body className={inter.className}>
-        
-        <Navbar></Navbar>
-        {children}
-        
-      </body>
-    </html>
-  );
+export default async function RootLayout({ children }) {
+	const session = await getServerSession();
+
+	return (
+		<html lang="en">
+			<body className={inter.className}>
+				<SessionProvider session={session}>
+					{children}
+					<ReactToast/>
+				</SessionProvider>
+			</body>
+		</html>
+	);
 }

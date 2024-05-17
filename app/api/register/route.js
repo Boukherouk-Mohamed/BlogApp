@@ -1,22 +1,31 @@
-import { NextResponse } from 'next/server'
-import { connectMongoDB } from '@/libs/mongodb';
-import User from '@/models/user';
-import bcrypt from 'bcryptjs'
+import connectDB from "@/libs/mongodb";
+import User from "@/models/User.js";
+import bcrypt from "bcryptjs";
+import { NextResponse } from "next/server";
 
-export async function POST(req) {
-    try {
+export const POST = async (request) => {
+	const { username, email, password, confirmPassword } = await request.json();
+	if (password !== confirmPassword) {
+		return new NextResponse(
+            JSON.stringify({ error: "password do not match" }),
+            { status: 400 ,});
+	}
+	await connectDB();
+	const existingUser = await User.findOne({ email });
 
-        const { name, email, password } = await req.json();
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        await connectMongoDB();
-        await User.create({ name, email, password: hashedPassword });
-
-        return NextResponse.json({ message: "User registered." }, { status: 201 })
-
-    } catch(error) {
-
-        return NextResponse.json({ message: "An error occured while registering the user." }, { status: 500 })
-
+	if (existingUser) {
+        return new NextResponse(
+            JSON.stringify({ error: "user already exists" }), {
+			status: 400,
+		});
     }
-}
+    
+    const hashedPassword = await bcrypt.hash(password, 10)
+    const newUser = new User({ username, email, password: hashedPassword})
+    try {
+        await newUser.save()
+        return new NextResponse("User successfully registered", {status: 201})
+    } catch (error) {
+        return new NextResponse(error, {status:500})
+    }
+};

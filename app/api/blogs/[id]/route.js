@@ -1,4 +1,3 @@
-//app\api\blog\[id]\route.js
 import connectMongoDB from "@/libs/mongodb";
 import Blog from "@/models/Blog";
 import { NextResponse } from "next/server";

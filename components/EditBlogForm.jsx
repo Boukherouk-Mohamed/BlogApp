@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import dynamic from 'next/dynamic'; 
 import 'react-quill/dist/quill.snow.css';
 import './customQuill.css'; 
+import Navbar from "./Navbar";
 
 // Dynamically import ReactQuill to avoid SSR issues (only if using Next.js)
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
@@ -22,6 +23,7 @@ const modules = {
 export default function EditBlogForm(props) {
     const [newTitle, setNewTitle] = useState(props.title);
     const [newContent, setNewContent] = useState(props.content);
+    const [searchTerm, setSearchTerm] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -50,6 +52,8 @@ export default function EditBlogForm(props) {
 
     return (
         <>
+
+            <Navbar onSearch={setSearchTerm} />
             <ToastContainer />
             <div className=" divide-y divide-gray-200 dark:divide-gray-700 w-3/6 mt-5 m-auto pt-2 pl-6 pr-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                 <h1 className="max-w-lg mx-auto text-3xl font-medium dark:text-pink-300 pt-4 pb-1">Edit your blog</h1>

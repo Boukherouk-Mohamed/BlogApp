@@ -1,113 +1,161 @@
-"use client"
+"use client";
 
-import React, { useState, useEffect } from 'react'
+import Navbar from "@/components/Navbar";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 
-import Navbar from "@/components/Navbar2";
-import Link from 'next/link'
-import { useSession } from 'next-auth/react';
-import { redirect } from 'next/navigation'
-import Container from '@/components/Container';
+const Registerr = () => {
+	const router = useRouter();
+	const { data: session, status: sessionStatus } = useSession();
 
-function RegisterPage() {
+	useEffect(() => {
+		if (sessionStatus === "authenticated") {
+			router.push("/dashboard");
+		}
+	}, [sessionStatus, router]);
 
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [error, setError] = useState("");
-    const [success, setSuccess] = useState("");
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+	
+		const username = e.target[1].value;
+		const email = e.target[0].value;
+		const password = e.target[2].value;
+		const confirmPassword = e.target[3].value;
+	
+		if (!username || !email || !password || !confirmPassword) {
+			toast.error("Please fill all the input fields");
+			return;
+		} else if (password !== confirmPassword) {
+			toast.error("Password do not match");
+			return;
+		}
+	
+		try {
+			const res = await fetch("/api/register", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					username,
+					email,
+					password,
+					confirmPassword,
+				}),
+			});
+	
+			if (!res.ok) {
+				const errorData = await res.json();
+				toast.error(`Error: ${errorData.message}`);
+				return;
+			}
+	
+			if (res.status === 400) {
+				toast.error("This email is already registered");
+			} else if (res.status === 201) {
+				router.push("/login");
+			}
+		} catch (error) {
+			console.error("An error occurred:", error);
+			toast.error("An unexpected error occurred");
+		}
+	};
+	
+	if (sessionStatus === "loading") {
+		return <span className="loading loading-spinner loading-lg"></span>
+		;
+	}
+	return (
+		sessionStatus !== "authenticated" && (
+			<>
+			
+			<Navbar></Navbar>
+			<div className="mt-10 flex items-center justify-center">
+				<div className=" bg-blue-900/10 p-8 rounded shadow-md w-96">
+					<h2 className="text-2xl font-semibold mb-4">Register</h2>
+					<form onSubmit={handleSubmit}>
+						<div className="mb-4">
+							<label
+								htmlFor="email"
+								className="black text-gray-700 text-sm font-bold mb-2"
+							>
+								Email
+							</label>
+							<input
+								type="email"
+								id="email"
+								name="email"
+								className="w-full p-2 border border-gray-300 rounded"
+							/>
+						</div>
+						<div className="mb-4">
+							<label
+								htmlFor="username"
+								className="black text-gray-700 text-sm font-bold mb-2"
+							>
+								Username
+							</label>
+							<input
+								type="text"
+								id="username"
+								name="username"
+								className="w-full p-2 border border-gray-300 rounded"
+							/>
+						</div>
 
-    const { data: session } = useSession();
-    if (session) redirect('/welcome');
+						<div className="mb-4">
+							<label
+								htmlFor="password"
+								className="black text-gray-700 text-sm font-bold mb-2"
+							>
+								Password
+							</label>
+							<input
+								type="password"
+								id="password"
+								name="password"
+								className="w-full p-2 border border-gray-300 rounded"
+							/>
+						</div>
+						<div className="mb-4">
+							<label
+								htmlFor="password-confirm"
+								className="black text-gray-700 text-sm font-bold mb-2"
+							>
+								Confirm Password
+							</label>
+							<input
+								type="password"
+								id="password-confirm"
+								name="password-confirm"
+								className="w-full p-2 border border-gray-300 rounded"
+							/>
+						</div>
+						<div>
+							<button
+								type="submit"
+								className="mb-5 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+							>
+								Register
+							</button>
+						</div>
+						<span>
+							{" "}
+							Already have an account?{" "}
+							<Link
+								className="text-center text-blue-500 hover:underline mt-2"
+								href={"/login"}
+							>
+								Login
+							</Link>
+						</span>
+					</form>
+				</div>
+			</div>
+			</>
+		)
+	);
+};
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        if (password != confirmPassword) {
-            setError("Password do not match!");
-            return;
-        }
-
-        if (!name || !email || !password || !confirmPassword) {
-            setError("Please complete all inputs.");
-            return;
-        }
-
-        const resCheckUser = await fetch("http://localhost:3000/api/usercheck", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email })
-        })
-
-        const { user } = await resCheckUser.json();
-
-        if (user) { 
-            setError("User already exists.");
-            return;
-        }
-
-        try {
-            const res = await fetch("http://localhost:3000/api/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    name, email, password
-                })
-            })
-
-            if (res.ok) {
-                const form = e.target;
-                setError("");
-                setSuccess("User registration successfully!");
-                form.reset();
-            } else {
-                console.log("User registration failed.")
-            }
-
-        } catch(error) {
-            console.log("Error during registration: ", error)
-        }
-    }
-
-  return (
-    <Container>
-        <Navbar />
-            <div className='flex-grow'>
-                <div className="flex justify-center items-center">
-                    <div className='w-[400px] shadow-xl p-10 mt-5 rounded-xl'>
-                        <h3 className='text-3xl'>Register Page</h3>
-                        <hr className='my-3' />
-                        <form onSubmit={handleSubmit}>
-
-                            {error && (
-                                <div className='bg-red-500 w-fit text-sm text-white py-1 px-3 rounded-md mt-2'>
-                                    {error}
-                                </div>
-                            )}
-
-                            {success && (
-                                <div className='bg-green-500 w-fit text-sm text-white py-1 px-3 rounded-md mt-2'>
-                                    {success}
-                                </div>
-                            )}
-
-                            <input type="text" onChange={(e) => setName(e.target.value)} className='w-full bg-gray-200 border py-2 px-3 rounded text-lg my-2' placeholder='Enter your name' />
-                            <input type="text" onChange={(e) => setEmail(e.target.value)} className='w-full bg-gray-200 border py-2 px-3 rounded text-lg my-2' placeholder='Enter your email' />
-                            <input type="password" onChange={(e) => setPassword(e.target.value)} className='w-full bg-gray-200 border py-2 px-3 rounded text-lg my-2' placeholder='Enter your password' />
-                            <input type="password" onChange={(e) => setConfirmPassword(e.target.value)} className='w-full bg-gray-200 border py-2 px-3 rounded text-lg my-2' placeholder='Confirm your password' />
-                            <button type='submit' className='bg-green-500 text-white border py-2 px-3 rounded text-lg my-2'>Sign Up</button>
-                        </form>
-                        <hr className='my-3' />
-                        <p>Go to <Link href="/login" className='text-blue-500 hover:underline'>Login</Link> Page</p>
-                    </div>
-                </div>
-            </div>
-    </Container>
-  )
-}
-
-export default RegisterPage
+export default Registerr;

@@ -1,77 +1,61 @@
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
-import connectMongoDB from "@/libs/mongodb";
-import User from "@/models/user";
-import bcrypt from 'bcryptjs'
+import bcrypt from "bcryptjs";
+import connectDB from "@/libs/mongodb";
+import User from "@/models/User";
 
-const authOptions = {
-    providers: [
-        CredentialsProvider({
-          name: 'credentials',
-          credentials: {},
-          async authorize(credentials) {
-           
-            const { email, password } = credentials;
+export const authOptions = {
+	providers: [
+		CredentialsProvider({
+			id: "credentials",
+			name: "credentials",
+			credentials: {
+				email: {
+					label: "Email",
+					type: "email",
+				},
+				password: {
+					label: "Password",
+					type: "password",
+				}
+			},
+			async authorize(credentials) {
+				await connectDB();
+				try {
+					const user = await User.findOne({ email: credentials.email });
+					if (user) {
 
-            try {
-
-                await connectMongoDB();
-                const user = await User.findOne({ email });
-
-                if (!user) {
-                    return null;
-                }
-
-                const passwordMatch = await bcrypt.compare(password, user.password);
-
-                if (!passwordMatch) {
-                    return null;
-                }
-
-                console.log(user);
-                return user;
-
-            } catch(error) {
-                console.log("Error: ", error)
-            }
-
-          }
-        })
-    ],
-    session: {
-        strategy: "jwt"
-    },
-    secret: process.env.NEXTAUTH_SECRET,
-    pages: {
-        signIn: "/login"
-    },
-    callbacks: {
-        async jwt({ token, user, account, profile, isNewUser }) {
-
-            if (user) {
-                return {
-                    ...token,
-                    id: user._id,
-                    role: user.role
-                }
-            }
-
-            return token
-        },
-        async session({ session, user, token }) {
-            return {
-                ...session,
-                user: {
-                    ...session.user,
-                    id: token.id,
-                    role: token.role
-                }
-            }
-        }
-    }
-}
-
-const handler = NextAuth(authOptions);
-
-export { handler as GET, handler as POST }
-
+						const isPasswordCorrect = await bcrypt.compare(
+							credentials.password,
+							user.password
+						);
+						if (isPasswordCorrect) {
+							return Promise.resolve(user);
+						} else {
+							return Promise.resolve(null);
+						}
+			}
+					// if (user && user.password === credentials.password) {
+					// 	return Promise.resolve(user);
+					// }
+					else {
+						return Promise.resolve(null);
+					}
+				} catch (error) {
+					throw new Error(error.message);
+				}
+			}
+		})
+	],
+	callbacks: {
+		async signIn({ user, account }) {
+			if (account?.provider == "credentials") {
+				return Promise.resolve(true);
+			} else {
+				return Promise.resolve(false);
+			}
+		}
+	}
+};
+export const handler = NextAuth(authOptions)
+export {handler as GET, handler as POST}
