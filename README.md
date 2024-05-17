@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Blog CRUD App
+
+This is a full-stack blog CRUD (Create, Read, Update, Delete) application built with Next.js, MongoDB, and NextAuth for authentication. The app allows users to register, log in, and manage blog posts. Each blog post includes a title, content, creation date, and information about the author. The app uses Tailwind CSS and DaisyUI for styling and is fully dockerized for easy deployment.
+
+## Features
+
+- User authentication (register and login) with NextAuth
+- CRUD operations for blog posts
+  - Create a new blog post
+  - Edit an existing blog post
+  - Delete a blog post
+  - View details of a specific blog post, including the author and creation date
+- Responsive UI built with Tailwind CSS and DaisyUI
+
+## Prerequisites
+
+- Node.js
+- Docker (optional, for containerized deployment)
+- MongoDB instance (local or cloud)
 
 ## Getting Started
 
-First, run the development server:
+### 1. Clone the Repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/Boukherouk-Mohamed/BlogApp.git
+cd BlogApp
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### 2. Install Dependencies
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```bash
+npm install
 
-## Learn More
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 3. Environment Variables
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Create a .env file in the root of your project and add the following environment variables:
+```bash
+NEXTAUTH_SECRET=your_nextauth_secret
+MONGODB_URI=your_mongodb_uri
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### 4. Running the App
+## 4-1. Without Docker
 
-## Deploy on Vercel
+To run the app locally without Docker:
+```bash
+npm run dev
+```
+The app will be available at http://localhost:3000.
+## 4-1. With Docker
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+To run the app using Docker:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Build and start the containers:
+```bash
+docker-compose up --build
+```
+The app will be available at http://localhost:3000.
+
+### Usage
+  ## Authentication
+  - Register a new user or log in with an existing account.
+  - After logging in, users can create, edit, and delete their own blog posts.
+  ## Blog Management
+  - Create a Blog Post: Navigate to the "Create Blog" page, fill in the title and content, and submit.
+  - Edit a Blog Post: Navigate to the blog post details page and click "Edit". Update the content and save changes.
+  - Delete a Blog Post: Navigate to the blog post details page and click "Delete".
+  - View Blog Post Details: Click on a blog post title from the list to view its details, including the author and creation date.
+
+
+## Contact
+For any questions or feedback, please contact boukherouk.mohamed@gmail.com.
