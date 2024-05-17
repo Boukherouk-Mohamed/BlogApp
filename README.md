@@ -11,7 +11,7 @@ This is a full-stack blog CRUD (Create, Read, Update, Delete) application built 
   - Delete a blog post
   - View details of a specific blog post, including the author and creation date
 - Pagination for the list of blog posts
-- Search functionality to allow users to search for blog posts by title or content
+- Search functionality to allow users to search for blog posts by title
 - A rich text editor for creating and editing blog post content
 - Responsive UI built with Tailwind CSS and DaisyUI
 
@@ -74,7 +74,7 @@ The app will be available at http://localhost:3000.
   - Delete a Blog Post: Navigate to the blog post details page and click "Delete".
   - View Blog Post Details: Click on a blog post title from the list to view its details, including the author and creation date.
   - Pagination: Navigate through the list of blog posts using the pagination controls at the bottom of the list.
-  - Search: Use the search bar to find blog posts by title or content.
+  - Search: Use the search bar to find blog posts by title.
 
 
 ## Contact
